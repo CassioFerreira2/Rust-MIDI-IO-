@@ -4,7 +4,8 @@ pub trait ReplacebleIndex<T> {
 
 pub trait Lockable<T> {
     fn lock(&mut self, len: usize);
-    fn safe_push(&mut self, value: T);
+    fn get_lock_len(&self) -> usize;
+    fn is_locked(&self) -> bool;
 }
 
 

@@ -4,10 +4,11 @@ use std::{mem, ops::{Deref, DerefMut}};
 pub mod traits;
 use traits::*;
 
-
+#[derive(Clone)]
 pub struct AsciiVec {
     _vec: ModernVec<char>
 }
+
 
 impl AsciiVec {
     pub fn new(len: usize) -> AsciiVec {
@@ -76,7 +77,7 @@ impl AsciiVec {
 
 
 
-
+#[derive(Clone)]
 pub struct ModernVec<T> {
     _lock: Option<usize>,
     _vec: Vec<T>,

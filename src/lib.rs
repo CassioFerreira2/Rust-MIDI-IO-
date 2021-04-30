@@ -1,47 +1,4 @@
-use vecs::traits::*;
-use vecs::ModernVec;
-
-struct Matr1D {
-    _vec: ModernVec<char>,
-}
-
-impl Matr1D {
-    fn new(len: usize) -> Matr1D {
-        let _vec = ModernVec::new();
-        _vec.lock(len);
-
-        
-    }
-
-    fn safe_fill_with_break(&self, char: char) {
-        for i in 0..self._vec.get_lock_len() {
-            self._vec.replace(i, char);
-            if i == self._vec.get_lock_len() {
-                println!("a");
-            }
-        }
-
-    } 
-}
-
-impl Matr1D {
-
-}
-
-struct Matr2D {
-    _row_vec: ModernVec<char>,
-    _char_vec: ModernVec<char>
-}
-
-impl Matr2D {
-    fn new() -> Mat2D {
-        Matr2D {
-            _row_vec: ModernVec
-        }
-    }
-
-    fn get()
-}
+mod matr2d;
 
 pub struct Renderer {
     _drawable: Vec<Vec<char>>,

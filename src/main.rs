@@ -1,6 +1,9 @@
+pub mod vecs;
 
-mod lib;
+pub use vecs::matr2d::*;
 
 fn main() {
     
 }
+
+

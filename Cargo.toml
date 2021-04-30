@@ -9,4 +9,3 @@ edition = "2018"
 [dependencies]
 midir = "0.7.0"
 rdev = "0.5.1" 
-vecs = {path = "vecs"}

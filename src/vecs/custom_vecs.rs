@@ -1,8 +1,6 @@
 
 use std::{mem, ops::{Deref, DerefMut}};
 
-use super::traits::*;
-
 #[derive(Clone)]
 pub struct AsciiVec {
     _vec: ModernVec<char>
@@ -104,6 +102,18 @@ impl<T> ModernVec<T> {
 
 }
 
+//---------------- traits
+pub trait ReplacebleIndex<T> {
+    fn replace(&mut self, index: usize, src: T);
+}
+
+pub trait Lockable<T> {
+    fn lock(&mut self, len: usize);
+    fn get_lock_len(&self) -> usize;
+    fn is_locked(&self) -> bool;
+}
+
+// ---------------- impl of traits
 impl<T> ReplacebleIndex<T> for ModernVec<T> {
     /// Will replace at the specified index
     fn replace(&mut self, index: usize, mut src: T) {

@@ -43,7 +43,7 @@ impl Matr {
         let dx = x2 - x1;
         let dy = y2 - y1;
 
-        for x in x1..x2 {
+        for x in x1..x2+1 {
             let y = y1 + dy * (x - x1) / dx;
             self.draw_point(x, y, ch)
         }
@@ -99,6 +99,28 @@ impl Matr {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_plot_line() {
+        let mut mat = Matr::new(5, 5, Some('b'));
+        mat.draw_line(0, 0, 3, 3, 'x');
+
+        let result = mat.get_str();
+        let expect = String::from("xbbb\nbxbb\nbbxb\nbbbx\nbbbb\n");
+        
+        assert_eq!(result, expect);
+    }
+
+    #[test]
+    fn test_plot_line2() {
+        let mut mat = Matr::new(5, 5, Some('b'));
+        mat.draw_line(1, 0, 3, 0, 'x');
+
+        let result = mat.get_str();
+        let expect = String::from("bxxx\nbbbb\nbbbb\nbbbb\nbbbb\n");
+        
+        assert_eq!(result, expect);
+    }
 
     #[test]
     fn test_new() {

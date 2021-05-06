@@ -34,18 +34,34 @@ impl Matr {
     }
     
     // We dont need to do so much error checks because the vecs already have a lot
-    pub fn draw_point(&mut self, x: usize, y: usize, ch: char) {
-        let row = &mut self._row_vec[y];
-        row.replace(x, ch);
+    pub fn draw_point(&mut self, x: f32, y: f32, ch: char) {
+        let ux = x.round() as usize;
+        let uy = y.round() as usize;
+        let row = &mut self._row_vec[uy];
+        row.replace(ux, ch);
     }
 
-    pub fn draw_line(&mut self, x1: usize, y1: usize, x2: usize, y2: usize, ch: char) {
-        let dx = x2 - x1;
-        let dy = y2 - y1;
+    // DDA algorithms
+    pub fn draw_line(&mut self, x1: f32, y1: f32, x2: f32, y2: f32, ch: char) {
+        let mut dx = x2 - x1;
+        let mut dy = y2 - y1;
+        let step: f32;
+        if dx.abs() >= dy.abs() {
+            step = dx.abs()
+        } else {
+            step = dy.abs()
+        }
+        dx = dx / step;
+        dy = dy / step;
+        let mut x = x1;
+        let mut y = y1;
 
-        for x in x1..x2+1 {
-            let y = y1 + dy * (x - x1) / dx;
-            self.draw_point(x, y, ch)
+        let mut i: f32 = 0.0;
+        while i <= step {
+            self.draw_point(x, y, ch);
+            x = x + dx;
+            y = y + dy;
+            i = i + 1.0;
         }
     }
     
@@ -103,7 +119,7 @@ mod tests {
     #[test]
     fn test_plot_line() {
         let mut mat = Matr::new(5, 5, Some('b'));
-        mat.draw_line(0, 0, 3, 3, 'x');
+        mat.draw_line(0.0, 0.0, 3.0, 3.0, 'x');
 
         let result = mat.get_str();
         let expect = String::from("xbbb\nbxbb\nbbxb\nbbbx\nbbbb\n");
@@ -114,10 +130,21 @@ mod tests {
     #[test]
     fn test_plot_line2() {
         let mut mat = Matr::new(5, 5, Some('b'));
-        mat.draw_line(1, 0, 3, 0, 'x');
+        mat.draw_line(1.0, 0.0, 3.0, 0.0, 'x');
 
         let result = mat.get_str();
         let expect = String::from("bxxx\nbbbb\nbbbb\nbbbb\nbbbb\n");
+        
+        assert_eq!(result, expect);
+    }
+
+    #[test]
+    fn test_plot_line3() {
+        let mut mat = Matr::new(5, 5, Some('b'));
+        mat.draw_line(1.0, 0.0, 2.0, 3.0, 'x');
+
+        let result = mat.get_str();
+        let expect = String::from("bxbb\nbxbb\nbbxb\nbbxb\nbbbb\n");
         
         assert_eq!(result, expect);
     }
@@ -209,7 +236,7 @@ mod tests {
     #[test]
     fn test_draw() {
         let mut mat = Matr::new(4, 4, None);
-        mat.draw_point(1, 2, 'a');
+        mat.draw_point(1.0, 2.0, 'a');
 
         let result = mat.get_str();
         let expect = String::from(
@@ -222,7 +249,7 @@ mod tests {
     #[should_panic]
     fn test_draw2() {
         let mut mat = Matr::new(4, 4, None);
-        mat.draw_point(1, 3, 'a');
+        mat.draw_point(1.0, 3.0, 'a');
 
         let result = mat.get_str();
         let expect = String::from(
@@ -236,16 +263,16 @@ mod tests {
     fn test_fill_draw() {
         let mut mat = Matr::new(6, 6, None);
 
-        mat.draw_point(3, 4, 'z');
+        mat.draw_point(3.0, 4.0, 'z');
         mat.fill('c');
 
         let st1 = mat.get_str();
         let expect1 = String::from("ccccc\nccccc\nccccc\nccccc\nccccc\nccccc\n");
 
-        mat.draw_point(0, 0, 'l');
-        mat.draw_point(0, 0, 'b');
-        mat.draw_point(1, 0, 'c');
-        mat.draw_point(1, 1, 'a');
+        mat.draw_point(0.0, 0.0, 'l');
+        mat.draw_point(0.0, 0.0, 'b');
+        mat.draw_point(1.0, 0.0, 'c');
+        mat.draw_point(1.0, 1.0, 'a');
 
         let st2 = mat.get_str();
         let expect2 = String::from("bcccc\ncaccc\nccccc\nccccc\nccccc\nccccc\n");

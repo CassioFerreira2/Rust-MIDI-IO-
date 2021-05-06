@@ -1,7 +1,6 @@
 /// You probably will recognize that the width is lower than what is printed.
 /// Well... this isn't a bug, what is happening is that '\n' is a hidden special char,
 /// but it's a char so the width must include him 
-
 use super::ascii_modern::AsciiVec;
 use super::ascii_modern::ModernVec;
 use super::traits::*;
@@ -23,7 +22,7 @@ impl Matr2D {
             a_vec.fill(c);
         } else {
             a_vec.fill('x');
-        
+            
         }
         // all rows in the vector will have the same ascii vec 
         for _ in 0.._row_vec.get_lock_len() {
